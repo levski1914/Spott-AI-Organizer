@@ -5,8 +5,8 @@ import Link from "next/link";
 import { Building, Crown, Plus, Sparkles, Ticket } from "lucide-react";
 // import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
 // import { Authenticated, Unauthenticated } from "convex/react";
-// import { BarLoader } from "react-spinners";
-// import { useStoreUser } from "@/hooks/use-store-user";
+import { BarLoader } from "react-spinners";
+import { useStoreUser } from "@/hooks/use-store-user";
 // import { useOnboarding } from "@/hooks/use-onboarding";
 // import OnboardingModal from "./onboarding-modal";
 // import SearchLocationBar from "./search-location-bar";
@@ -14,11 +14,21 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 // import UpgradeModal from "./upgrade-modal";
 import { Badge } from "./ui/badge";
+import {
+  SignIn,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  SignedOut,
+  Show,
+} from "@clerk/nextjs";
+import { Authenticated, Unauthenticated } from "convex/react";
 
 export default function Header() {
-  //   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  //   const { isLoading } = useStoreUser();
+  const { isLoading } = useStoreUser();
+
   //   const { showOnboarding, handleOnboardingComplete, handleOnboardingSkip } =
   //     useOnboarding();
 
@@ -54,20 +64,49 @@ export default function Header() {
           </div>
           {/* Right Side Actions */}
           <div className="flex items-center">
-            {/* Show Pro badge or Upgrade button */}
-            {/* {!hasPro && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowUpgradeModal(true)}
-              >
-                Pricing
-              </Button>
-            )}
-            <Button variant="ghost" size="sm" asChild className={"mr-2"}>
-              <Link href="/explore">Explore</Link>
+            <Button variant={"ghost"} size="sm" onClick={setShowUpgradeModal}>
+              Pricing
             </Button>
-            {}{" "} */}
+
+            <Button variant="ghost" size="sm" asChild className={"mr-2"}>
+              <Link href="explore"> Explore </Link>
+            </Button>
+            <Authenticated>
+              <Button size="lg" asChild className="flex gap-2 mr-4">
+                <Link
+                  href="/create-event"
+                  className="flex items-center justify-between"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span className="hidden sm:inline"> Create Event </span>
+                </Link>
+              </Button>
+              <UserButton>
+                <UserButton.MenuItems>
+                  <UserButton.Link
+                    label="My tickets"
+                    labelIcon={<Ticket size={16} />}
+                    href="/my-tickets"
+                  />
+                  <UserButton.Link
+                    label="My Events"
+                    labelIcon={<Building size={16} />}
+                    href="/my-events"
+                  />
+                  <UserButton.Action label="manageAccount" />
+                </UserButton.MenuItems>
+              </UserButton>
+            </Authenticated>
+            <Unauthenticated>
+              <SignInButton mode="modal">
+                <button size="sm">Sign in</button>
+              </SignInButton>
+              <SignUpButton>
+                <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </Unauthenticated>
           </div>
         </div>
 
@@ -76,25 +115,12 @@ export default function Header() {
           {/* <SearchLocationBar /> */}
         </div>
 
-        {/* {isLoading && (
+        {isLoading && (
           <div className="absolute bottom-0 left-0 w-full">
             <BarLoader width={"100%"} color="#a855f7" />
           </div>
-        )} */}
+        )}
       </nav>
-
-      {/* Onboarding Modal */}
-      {/* <OnboardingModal
-        isOpen={showOnboarding}
-        onClose={handleOnboardingSkip}
-        onComplete={handleOnboardingComplete}
-      />
-
-      <UpgradeModal
-        isOpen={showUpgradeModal}
-        onClose={() => setShowUpgradeModal(false)}
-        trigger="header"
-      /> */}
     </>
   );
 }
