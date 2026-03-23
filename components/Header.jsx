@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Building, Crown, Plus, Sparkles, Ticket } from "lucide-react";
-// import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 // import { Authenticated, Unauthenticated } from "convex/react";
 import { BarLoader } from "react-spinners";
 import { useStoreUser } from "@/hooks/use-store-user";
-// import { useOnboarding } from "@/hooks/use-onboarding";
+import { useOnboarding } from "@/hooks/use-onboarding";
 import OnboardingModal from "./onboarding-modal";
 // import SearchLocationBar from "./search-location-bar";
 import { Button } from "@/components/ui/button";
@@ -28,13 +28,11 @@ export default function Header() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const { isLoading } = useStoreUser();
+  const { showOnboarding, handleOnboardingComplete, handleOnboardingSkip } =
+    useOnboarding();
 
-  //   const { showOnboarding, handleOnboardingComplete, handleOnboardingSkip } =
-  //     useOnboarding();
-
-  //   const { has } = useAuth();
-  //   const hasPro = has?.({ plan: "pro" });
-
+  const { has } = useAuth();
+  const hasPro = has?.({ plan: "pro" });
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 bg-background/80 backdrop-blur-xl z-20 border-b">
@@ -112,7 +110,6 @@ export default function Header() {
               </SignUpButton>
             </Unauthenticated>
           </div>
-          <OnboardingModal />
         </div>
 
         {/* Mobile Search & Location - Below Header */}
@@ -126,6 +123,11 @@ export default function Header() {
           </div>
         )}
       </nav>
+      <OnboardingModal
+        isOpen={showOnboarding}
+        onClose={handleOnboardingSkip}
+        onComplete={handleOnboardingComplete}
+      />
     </>
   );
 }

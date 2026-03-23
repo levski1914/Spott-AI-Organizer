@@ -32,7 +32,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
   const [location, setLocation] = useState({
     state: "",
     city: "",
-    country: "India",
+    country: "Bulgaria",
   });
 
   const { mutate: completeOnboarding, isLoading } = useConvexMutation(
@@ -41,7 +41,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
 
   // Get Indian states
   const indianStates = useMemo(() => {
-    return State.getStatesOfCountry("IN");
+    return State.getStatesOfCountry("BG");
   }, []);
 
   // Get cities based on selected state
@@ -49,7 +49,7 @@ export default function OnboardingModal({ isOpen, onClose, onComplete }) {
     if (!location.state) return [];
     const selectedState = indianStates.find((s) => s.name === location.state);
     if (!selectedState) return [];
-    return City.getCitiesOfState("IN", selectedState.isoCode);
+    return City.getCitiesOfState("BG", selectedState.isoCode);
   }, [location.state, indianStates]);
 
   const toggleInterest = (categoryId) => {
