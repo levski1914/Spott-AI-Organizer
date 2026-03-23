@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import Header from "@/components/Header";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,11 +48,12 @@ export default function RootLayout({
                   <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-orange-600/20 rounded-full blur-3xl" />
                 </div>
                 <div className="relative z-10">{children}</div>
+                <footer className="border-t border-gray-800/50 py-8 px-6 max-w-7xl mx-auto">
+                  <div>Made with ❤️ by Georgi Dimitrov</div>
+                </footer>
+                <Toaster position="top-center" richColors />
               </main>
               {/* Footer */}
-              <footer className="border-t border-gray-800/50 py-8 px-6 max-w-7xl mx-auto">
-                <div>Made with ❤️ by Georgi Dimitrov</div>
-              </footer>
             </ConvexClientProvider>
           </ClerkProvider>
         </ThemeProvider>

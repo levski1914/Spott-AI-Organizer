@@ -8,7 +8,7 @@ import { Building, Crown, Plus, Sparkles, Ticket } from "lucide-react";
 import { BarLoader } from "react-spinners";
 import { useStoreUser } from "@/hooks/use-store-user";
 // import { useOnboarding } from "@/hooks/use-onboarding";
-// import OnboardingModal from "./onboarding-modal";
+import OnboardingModal from "./onboarding-modal";
 // import SearchLocationBar from "./search-location-bar";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -112,6 +112,7 @@ export default function Header() {
               </SignUpButton>
             </Unauthenticated>
           </div>
+          <OnboardingModal />
         </div>
 
         {/* Mobile Search & Location - Below Header */}
