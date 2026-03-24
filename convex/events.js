@@ -26,55 +26,54 @@ export const createEvent = mutation({
     hasPro: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
-    try {
-      const user = await ctx.runQuery(internal.users.getCurrentUser);
+  try {
+    const user = await ctx.runQuery(internal.users.getCurrentUser);
+    const hasPro = args.hasPro ?? false;
 
-      // SERVER-SIDE CHECK: Verify event limit for Free users
-      if (!hasPro && user.freeEventsCreated >= 1) {
-        throw new Error(
-          "Free event limit reached. Please upgrade to Pro to create more events."
-        );
-      }
+    if (!hasPro && user.freeEventsCreated >= 1) {
+      throw new Error(
+        "Free event limit reached. Please upgrade to Pro to create more events."
+      );
+    }
 
-      // SERVER-SIDE CHECK: Verify custom color usage
-      const defaultColor = "#1e3a8a";
-      if (!hasPro && args.themeColor && args.themeColor !== defaultColor) {
-        throw new Error(
-          "Custom theme colors are a Pro feature. Please upgrade to Pro."
-        );
-      }
+    const defaultColor = "#1e3a8a";
+    if (!hasPro && args.themeColor && args.themeColor !== defaultColor) {
+      throw new Error(
+        "Custom theme colors are a Pro feature. Please upgrade to Pro."
+      );
+    }
 
-      // Force default color for Free users
-      const themeColor = hasPro ? args.themeColor : defaultColor;
+    const themeColor = hasPro ? args.themeColor : defaultColor;
 
-      // Generate slug from title
-      const slug = args.title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
+    const slug = args.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
 
-      // Create event
-      const eventId = await ctx.db.insert("events", {
-        ...args,
-        themeColor, // Use validated color
-        slug: `${slug}-${Date.now()}`,
-        organizerId: user._id,
-        organizerName: user.name,
-        registrationCount: 0,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-      });
+    const { hasPro: _hasPro, ...eventData } = args;
 
-      // Update user's free event count
+    const eventId = await ctx.db.insert("events", {
+      ...eventData,
+      themeColor,
+      slug: `${slug}-${Date.now()}`,
+      organizerId: user._id,
+      organizerName: user.name,
+      registrationCount: 0,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    if (!hasPro) {
       await ctx.db.patch(user._id, {
         freeEventsCreated: user.freeEventsCreated + 1,
       });
-
-      return eventId;
-    } catch (error) {
-      throw new Error(`Failed to create event: ${error.message}`);
     }
-  },
+
+    return eventId;
+  } catch (error) {
+    throw new Error(`Failed to create event: ${error.message}`);
+  }
+},
 });
 
 // Get event by slug
