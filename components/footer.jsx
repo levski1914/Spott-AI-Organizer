@@ -9,7 +9,7 @@ const Footer = () => {
       </div>
 
       <div className="flex gap-4 items-center">
-        <a
+        {/* <a
           href="https://www.youtube.com/roadsidecoder"
           className="text-gray-400"
         >
@@ -23,7 +23,7 @@ const Footer = () => {
         </a>
         <a href="https://x.com/Piyush_eon" className="text-gray-400">
           <Twitter className="w-5 h-5" />
-        </a>
+        </a> */}
       </div>
     </footer>
   );
