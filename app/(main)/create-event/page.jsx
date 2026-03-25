@@ -528,7 +528,7 @@ export default function CreateEventPage() {
             {ticketType === "paid" && (
               <Input
                 type="number"
-                placeholder="Ticket price ₹"
+                placeholder="Ticket price EUR"
                 {...register("ticketPrice", { valueAsNumber: true })}
               />
             )}

@@ -262,7 +262,7 @@ export default function EventDashboardPage() {
                   <TrendingUp className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">₹{stats.totalRevenue}</p>
+                  <p className="text-2xl font-bold">EUR{stats.totalRevenue}</p>
                   <p className="text-sm text-muted-foreground">Revenue</p>
                 </div>
               </CardContent>

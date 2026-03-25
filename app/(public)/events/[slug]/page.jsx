@@ -248,7 +248,7 @@ export default function EventDetailPage() {
                   <p className="text-3xl font-bold">
                     {event.ticketType === "free"
                       ? "Free"
-                      : `₹${event.ticketPrice}`}
+                      : `EUR ${event.ticketPrice}`}
                   </p>
                   {event.ticketType === "paid" && (
                     <p className="text-xs text-muted-foreground mt-1">
